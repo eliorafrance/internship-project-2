@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Auth Page Styles */
+        .auth-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .auth-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 226, 0.3) 0%, transparent 50%);
+        }
+
+        .auth-container {
+            display: flex;
+            gap: 2rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .auth-form {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 2rem;
+            width: 350px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .logo::before {
+            content: '🎯';
+            margin-right: 0.5rem;
+        }
+
+        .form-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background: rgba(255, 255, 255, 0.3);
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn.active {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            font-size: 0.9rem;
+        }
+
+        .form-input::placeholder {
+            color: #666;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .checkbox-group label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+
+        .forgot-password a {
+            color: #7c3aed;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: #6d28d9;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .auth-footer a {
+            color: #7c3aed;
+            text-decoration: none;
+        }
+
+        /* Homepage Styles */
+        .homepage {
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: none;
+        }
+
+        .homepage.active {
+            display: block;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-logo::before {
+            content: '⚫';
+            color: #ff6b35;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .help-btn {
+            background: none;
+            border: none;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .logout-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .hero-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .hero-cta {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .get-access-btn {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .get-access-btn:hover {
+            background: #e55a2b;
+        }
+
+        .price-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .price-period {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .hero-visual {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .chat-bubbles {
+            position: absolute;
+        }
+
+        .chat-bubble {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            font-size: 0.9rem;
+            max-width: 150px;
+        }
+
+        .bubble-1 {
+            top: -50px;
+            left: -80px;
+            background: #fff3cd;
+        }
+
+        .bubble-2 {
+            bottom: -60px;
+            right: -100px;
+            background: #d4edda;
+        }
+
+        .bubble-3 {
+            top: 50px;
+            right: -120px;
+            background: #333;
+            color: white;
+        }
+
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nft-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nft-badge {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-section {
+            text-align: center;
+        }
+
+        .team-avatars {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .team-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #f9ca24);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .team-description {
+            max-width: 300px;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            color: #16a34a;
+            padding: 0.75rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Page -->
+    <div class="auth-page" id="authPage">
+        <div class="auth-container">
+            <!-- Login Form -->
+            <div class="auth-form" id="loginForm">
+                <div class="logo">glassmorphism</div>
+                
+                <div class="form-tabs">
+                    <button class="tab-btn active" onclick="showLoginForm()">👤 Sign In</button>
+                    <button class="tab-btn" onclick="showSignupForm()">👥 Sign Up</button>
+                </div>
+
+                <div id="loginError" class="error-message hidden"></div>
+                <div id="loginSuccess" class="success-message hidden"></div>
+
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="👤 Username" id="loginUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-input" placeholder="🔒 Password" id="loginPassword" required>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#">Forgot Password?</a>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Remember Me</label>
+                    </div>
+                    <button type="submit" class="submit-btn">🔐 Sign In</button>
+                </form>
+
+                <div class="auth-footer">
+                    Don't have an account? <a href="#" onclick="showSignupForm()">Sign Up</a>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="auth-form" id="signupForm" style="display: none;">
+                <div class="logo">glassmorphism</div>
+                
+                <div class="form-tabs">
+                    <button class="tab-btn" onclick="showLoginForm()">👤 Sign In</button>
+                    <button class="tab-btn active" onclick="showSignupForm()">👥 Sign Up</button>
+                </div>
+
+                <div id="signupError" class="error-message hidden"></div>
+                <div id="signupSuccess" class="success-message hidden"></div>
+
+                <form id="signupFormElement">
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="📧 Email" id="signupEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="👤 Username" id="signupUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-input" placeholder="🔒 Password" id="signupPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-input" placeholder="🔒 Confirm Password" id="confirmPassword" required>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="acceptTerms" required>
+                        <label for="acceptTerms">Accept Terms & Conditions</label>
+                    </div>
+                    <button type="submit" class="submit-btn">👥 Sign Up</button>
+                </form>
+
+                <div class="auth-footer">
+                    Already have an account? <a href="#" onclick="showLoginForm()">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Homepage -->
+    <div class="homepage" id="homepage">
+        <nav class="navbar">
+            <div class="nav-logo">Coinco</div>
+            <div class="nav-links">
+                <a href="#">Events</a>
+                <a href="#">Speakers</a>
+                <a href="#">Partners</a>
+                <a href="#">About Us</a>
+            </div>
+            <div class="nav-right">
+                <button class="help-btn">Help ▼</button>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">We make progress on crypto way</h1>
+                <div class="hero-cta">
+                    <button class="get-access-btn">Get Access</button>
+                    <div class="price-info">
+                        <div class="price-amount">$16.80</div>
+                        <div class="price-period">Monthly Price</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="user-avatar">
+                    🧑‍💼
+                </div>
+                <div class="chat-bubbles">
+                    <div class="chat-bubble bubble-1">
+                        💰 $1,640 + IT'S PERFECT TIME
+                    </div>
+                    <div class="chat-bubble bubble-2">
+                        DID YOU CATCH THAT?
+                    </div>
+                    <div class="chat-bubble bubble-3">
+                        ⭐ 5+ 📊
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div class="nft-info">
+                <div class="nft-badge">NFT</div>
+                <div class="nft-badge">▶️ See how it works</div>
+                <div style="margin-left: 1rem;">
+                    <strong>Art is everywhere.</strong><br>
+                    <span style="color: #666;">The overview.</span>
+                </div>
+            </div>
+            <div class="team-section">
+                <div style="background: white; padding: 0.5rem 1rem; border-radius: 15px; margin-bottom: 1rem; display: inline-block;">
+                    TEAM
+                </div>
+                <div class="team-avatars">
+                    <div class="team-avatar">A</div>
+                    <div class="team-avatar">B</div>
+                    <div class="team-avatar">C</div>
+                </div>
+                <div class="team-description">
+                    Our team is passionate about sharing their knowledge and experience with others. We are always available to offers.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User data storage
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+
+        // Check if user is already logged in
+        if (currentUser) {
+            showHomepage();
+        }
+
+        // Form switching functions
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+            clearMessages();
+        }
+
+        function showSignupForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+            clearMessages();
+        }
+
+        function clearMessages() {
+            document.querySelectorAll('.error-message, .success-message').forEach(msg => {
+                msg.classList.add('hidden');
+            });
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function showSuccess(elementId, message) {
+            const successElement = document.getElementById(elementId);
+            successElement.textContent = message;
+            successElement.classList.remove('hidden');
+        }
+
+        // Login form handler
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearMessages();
+
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Find user
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showSuccess('loginSuccess', 'Login successful! Redirecting...');
+                setTimeout(() => {
+                    showHomepage();
+                }, 1000);
+            } else {
+                showError('loginError', 'Invalid username or password');
+            }
+        });
+
+        // Signup form handler
+        document.getElementById('signupFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearMessages();
+
+            const email = document.getElementById('signupEmail').value;
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (password !== confirmPassword) {
+                showError('signupError', 'Passwords do not match');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('signupError', 'Password must be at least 6 characters long');
+                return;
+            }
+
+            // Check if username already exists
+            if (users.some(u => u.username === username)) {
+                showError('signupError', 'Username already exists');
+                return;
+            }
+
+            // Check if email already exists
+            if (users.some(u => u.email === email)) {
+                showError('signupError', 'Email already registered');
+                return;
+            }
+
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                email: email,
+                username: username,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            showSuccess('signupSuccess', 'Account created successfully! You can now sign in.');
+            
+            // Clear form
+            document.getElementById('signupFormElement').reset();
+            
+            // Switch to login form after delay
+            setTimeout(() => {
+                showLoginForm();
+            }, 2000);
+        });
+
+        function showHomepage() {
+            document.getElementById('authPage').style.display = 'none';
+            document.getElementById('homepage').classList.add('active');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('authPage').style.display = 'flex';
+            document.getElementById('homepage').classList.remove('active');
+            
+            // Clear forms
+            document.getElementById('loginFormElement').reset();
+            document.getElementById('signupFormElement').reset();
+            clearMessages();
+            showLoginForm();
+        }
+    </script>
+</body>
+</html>
